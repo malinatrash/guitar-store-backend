@@ -17,6 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from backend_api.views import UserAPIView, OrderAPIView, ProductAPIView, ProductCategoryAPIView, ProductCommentAPIView, \
+    ShoppingCartAPIView, WishlistAPIView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('api/users', UserAPIView.as_view()),
+    path('api/orders', OrderAPIView.as_view()),
+    path('api/products', ProductAPIView.as_view()),
+    path('api/product_categories', ProductCategoryAPIView.as_view()),
+    path('api/product_comments', ProductCommentAPIView.as_view()),
+    path('api/carts', ShoppingCartAPIView.as_view()),
+    path('api/wishlists', WishlistAPIView.as_view()),
 ]

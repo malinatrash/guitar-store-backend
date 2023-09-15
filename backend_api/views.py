@@ -1,13 +1,11 @@
-from rest_framework import generics
+from django.forms import model_to_dict
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import User, Order, Product, ProductCategory, ProductComment, ShoppingCart, Wishlist
 from .serializers import UserSerializer, OrderSerializer, ProductSerializer, ProductCategorySerializer, \
     ShoppingCartSerializer, ProductCommentSerializer, WishlistSerializer
-
-
-class UserAPIView(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
 
 class OrderAPIView(generics.ListAPIView):
     queryset = Order.objects.all()
@@ -29,12 +27,12 @@ class ProductCommentAPIView(generics.ListAPIView):
     serializer_class = ProductCommentSerializer
 
 
-class ShoppingCartAPIView(generics.ListAPIView):
-    queryset = ShoppingCart.objects.all()
-    serializer_class = ShoppingCartSerializer
+# class ShoppingCartAPIView(generics.ListAPIView):
+#     queryset = ShoppingCart.objects.all()
+#     serializer_class = ShoppingCartSerializer
 
 
-class WishlistAPIView(generics.ListAPIView):
-    queryset = Wishlist.objects.all()
-    serializer_class = WishlistSerializer
+# class WishlistAPIView(generics.ListAPIView):
+#     queryset = Wishlist.objects.all()
+#     serializer_class = WishlistSerializer
 

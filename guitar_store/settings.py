@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-%qjb71@&cz4ie91*j14qt&_*)w8j%_d&0d*@^1=!ow^7a5+j=(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -39,17 +39,6 @@ INSTALLED_APPS = [
     "backend_api.apps.BackendApiConfig",
     "corsheaders",
 ]
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://192.168.0.195:5173",
-    "http://192.168.0.195:5173",
-    "http://192.168.0.152",
-    "http://192.168.0.170",
-    'http://76.76.21.98'
-]
-
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'localhost:5173']
 
 CORS_ALLOW_HEADERS = [
     'accept',

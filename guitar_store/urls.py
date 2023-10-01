@@ -20,6 +20,7 @@ from django.urls import path
 from backend_api.migrations.Views import WishlistAPIView
 from backend_api.migrations.Views.ShoppingCartAPIView import ShoppingCartAPIView
 from backend_api.migrations.Views.UserAPIView import UserAPIView
+from backend_api.migrations.Views.VendorAPIView import VendorAPIView
 from backend_api.views import OrderAPIView, ProductAPIView, ProductCategoryAPIView, ProductCommentAPIView
 
 
@@ -31,5 +32,6 @@ urlpatterns = [
     path('api/product_categories', ProductCategoryAPIView.as_view()),
     path('api/product_comments', ProductCommentAPIView.as_view()),
     path('api/carts', ShoppingCartAPIView.as_view()),
+    path('api/vendors', VendorAPIView.as_view()),
     path('api/wishlist', WishlistAPIView.WhishlistAPIView.as_view()),
 ]

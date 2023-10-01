@@ -12,6 +12,7 @@
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
+      <configured-by-url>true</configured-by-url>
       <remarks>$PROJECT_DIR$/guitar_store/settings.py</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://127.0.0.1:5432/postgres</jdbc-url>

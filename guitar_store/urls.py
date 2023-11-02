@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from backend_api.migrations.Views import WishlistAPIView
+from backend_api.migrations.Views.CommentAPIView import CommentsAPIView
 from backend_api.migrations.Views.CountryAPIView import CountryAPIView
 from backend_api.migrations.Views.ShoppingCartAPIView import ShoppingCartAPIView
 from backend_api.migrations.Views.UserAPIView import UserAPIView
@@ -30,6 +31,7 @@ urlpatterns = [
     path('api/user', UserAPIView.as_view()),
     path('api/orders', OrderAPIView.as_view()),
     path('api/products', ProductAPIView.as_view()),
+    path('api/comments', CommentsAPIView.as_view()),
     path('api/product_categories', ProductCategoryAPIView.as_view()),
     path('api/product_comments', ProductCommentAPIView.as_view()),
     path('api/carts', ShoppingCartAPIView.as_view()),

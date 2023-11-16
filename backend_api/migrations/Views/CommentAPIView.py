@@ -1,9 +1,10 @@
+from xml.dom import ValidationErr
 from backend_api.models import ProductComment, User, Product
-# Import the ProductSerializer
-from backend_api.serializers import UserSerializer, ProductSerializer
+from backend_api.serializers import ProductCommentSerializer, UserSerializer, ProductSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 
 
 class CommentsAPIView(APIView):
@@ -29,3 +30,20 @@ class CommentsAPIView(APIView):
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Product ID is required in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        serializer = ProductCommentSerializer(data=request.data)
+        if serializer.is_valid():
+            user_id = serializer.validated_data.get('user_id')
+            product_id = serializer.validated_data.get('product_id')
+
+            user_exists = User.objects.filter(pk=user_id).exists()
+            product_exists = Product.objects.filter(pk=product_id).exists()
+
+            if user_exists and product_exists:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                raise ValidationErr("User or Product does not exist")
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

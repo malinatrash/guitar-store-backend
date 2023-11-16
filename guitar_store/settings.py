@@ -52,6 +52,8 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+APPEND_SLASH = True
+
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',

@@ -46,9 +46,8 @@ class CommentsAPIView(APIView):
         comment_date = date.today()
 
         comment = ProductComment(
-            comment_id=-1,
-            user_id_id=user,
-            product_id_id=product,
+            user_id=user,
+            product_id=product,
             comment_text=comment_text,
             comment_date=comment_date
         )

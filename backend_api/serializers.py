@@ -54,8 +54,8 @@ class ProductCommentSerializer(serializers.ModelSerializer):
             'comment_text',
             'likes_count',
             'comment_date',
-            'product_id_id',
-            'user_id_id'
+            'product_id',
+            'user_id'
         )
 
 

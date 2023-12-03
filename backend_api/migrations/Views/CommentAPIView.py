@@ -1,3 +1,4 @@
+from datetime import date
 from xml.dom import ValidationErr
 from backend_api.models import ProductComment, User, Product
 from backend_api.serializers import ProductCommentSerializer, UserSerializer, ProductSerializer
@@ -32,18 +33,32 @@ class CommentsAPIView(APIView):
             return Response({'error': 'Product ID is required in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
-        serializer = ProductCommentSerializer(data=request.data)
+        comment_data = request.data
+        user_id = comment_data.get('user_id')
+        print(user_id)
+        product_id = comment_data.get('product_id')
+        print(product_id)
+        comment_text = comment_data.get('comment_text')
+
+        user = User.objects.get(pk=user_id)
+        product = Product.objects.get(pk=product_id)
+
+        comment_date = date.today()
+
+        comment = ProductComment(
+            comment_id=-1,
+            user_id_id=user,
+            product_id_id=product,
+            comment_text=comment_text,
+            comment_date=comment_date
+        )
+
+        print(comment.__dict__)
+
+        serializer = ProductCommentSerializer(data=comment.__dict__)
+
         if serializer.is_valid():
-            user_id = serializer.validated_data.get('user_id')
-            product_id = serializer.validated_data.get('product_id')
-
-            user_exists = User.objects.filter(pk=user_id).exists()
-            product_exists = Product.objects.filter(pk=product_id).exists()
-
-            if user_exists and product_exists:
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                raise ValidationErr("User or Product does not exist")
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

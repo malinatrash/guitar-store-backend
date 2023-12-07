@@ -34,6 +34,7 @@ class CommentsAPIView(APIView):
 
     def post(self, request):
         comment_data = request.data
+        print(comment_data)
         user_id = comment_data.get('user_id')
         print(user_id)
         product_id = comment_data.get('product_id')
@@ -41,6 +42,7 @@ class CommentsAPIView(APIView):
         comment_text = comment_data.get('comment_text')
 
         user = User.objects.get(pk=user_id)
+        print(user.user_id)
         product = Product.objects.get(pk=product_id)
 
         comment_date = date.today()
@@ -52,7 +54,7 @@ class CommentsAPIView(APIView):
             comment_date=comment_date
         )
 
-        print(comment.__dict__)
+        print("Here", comment.__dict__)
 
         serializer = ProductCommentSerializer(data=comment.__dict__)
 

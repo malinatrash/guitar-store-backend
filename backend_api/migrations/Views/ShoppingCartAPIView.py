@@ -39,7 +39,7 @@ class ShoppingCartAPIView(APIView):
                     'country_of_origin': product.country_of_origin.name,
                     'year_of_production': product.year_of_production,
                     'image_url': product.image_url,
-                    'total_price': count * product.price,
+                    'quantity': count,
                 }
                 products_data.append(product_data)
 

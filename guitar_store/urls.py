@@ -15,14 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from backend_api.migrations.Views import WishlistAPIView
 from backend_api.migrations.Views.CommentAPIView import CommentsAPIView
 from backend_api.migrations.Views.CountryAPIView import CountryAPIView
 from backend_api.migrations.Views.LikeAPIView import LikeAPIView
+from backend_api.migrations.Views.SessionAPIView import SessionAPIView
 from backend_api.migrations.Views.ShoppingCartAPIView import ShoppingCartAPIView
 from backend_api.migrations.Views.UserAPIView import UserAPIView
+from backend_api.migrations.Views.UserOrdersView import UserOrdersView
 from backend_api.migrations.Views.VendorAPIView import VendorAPIView
 from backend_api.views import OrderAPIView, ProductAPIView, ProductCategoryAPIView, ProductCommentAPIView
 
@@ -30,7 +32,6 @@ from backend_api.views import OrderAPIView, ProductAPIView, ProductCategoryAPIVi
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/user', UserAPIView.as_view()),
-    path('api/orders', OrderAPIView.as_view()),
     path('api/products', ProductAPIView.as_view()),
     path('api/comments', CommentsAPIView.as_view()),
     path('api/like', LikeAPIView.as_view()),
@@ -42,4 +43,11 @@ urlpatterns = [
     path('api/wishlist', WishlistAPIView.WhishlistAPIView.as_view()),
     path('api/like/<int:comment_id>/',
          LikeAPIView.as_view(), name='like-comment'),
+
+    path('api/auth', include('rest_framework.urls')),
+    path('api/session', SessionAPIView.as_view()),
+    path('api/orders',
+         UserOrdersView.as_view(), name='user_orders'),
+
+
 ]

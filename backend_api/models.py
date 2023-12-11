@@ -1,5 +1,8 @@
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+import uuid
 
 
 class User(models.Model):
@@ -58,20 +61,19 @@ class Product(models.Model):
 
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
-        ('ожидает', 'Ожидает'),
-        ('в обработке', 'В обработке'),
-        ('отправлен', 'Отправлен'),
-        ('доставлен', 'Доставлен'),
-        ('отменен', 'Отменен'),
+        ('открыт', 'Открыт'),
+        ('закрыт', 'Закрыт'),
     ]
 
+    # Другие поля модели
+
+    order_status = models.CharField(
+        max_length=50, choices=ORDER_STATUS_CHOICES, default='открыт')
     order_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateField(default=timezone.now)
-    order_status = models.CharField(
-        max_length=50, choices=ORDER_STATUS_CHOICES, default='ожидает')
     total_price = models.DecimalField(
-        max_digits=10, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2)
     products = models.ManyToManyField(
         Product, related_name='orders', through='OrderProduct')
 
@@ -82,8 +84,7 @@ class Order(models.Model):
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(
-        default=1)  # Количество товаров в заказе
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"{self.quantity} x {self.product.product_name}"
@@ -118,3 +119,29 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"Wishlist for {self.user_id}"
+
+
+class Session(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    session_id = models.TextField()
+    session_data = models.JSONField(null=True, blank=True)
+    expiration_time = models.DateTimeField()
+
+    @classmethod
+    def create_session(cls, user, session_id):
+        expiration_time = timezone.now() + timedelta(minutes=15)
+        return cls.objects.create(user=user, session_id=session_id, expiration_time=expiration_time)
+
+    @classmethod
+    def get_session(cls, session_id):
+        try:
+            return cls.objects.get(session_id=session_id)
+        except cls.DoesNotExist:
+            return None
+
+    def is_expired(self):
+        return self.expiration_time < timezone.now()
+
+    def delete_session(self):
+        self.delete()

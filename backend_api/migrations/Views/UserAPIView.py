@@ -1,12 +1,27 @@
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend_api.models import User
+from backend_api.models import Session, User
+
+import uuid
+
+
+def generate_unique_session_id():
+    return str(uuid.uuid4())
 
 
 class UserAPIView(APIView):
+
+    def create_session(self, user):
+        session_id = generate_unique_session_id()
+        Session.create_session(
+            user=user, session_id=session_id)
+        return session_id
+
     def get(self, request):
         try:
             email = request.query_params.get('email')
@@ -21,6 +36,8 @@ class UserAPIView(APIView):
 
             user = get_object_or_404(User, email=email, password=password)
 
+            session_id = self.create_session(user)
+
             user_data = {
                 'user_id': user.user_id,
                 'firstname': user.first_name,
@@ -31,8 +48,10 @@ class UserAPIView(APIView):
 
             response_data = {
                 'user': user_data,
+                'session_id': session_id,
                 'status_code': status.HTTP_200_OK
             }
+
             return Response(response_data, status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
@@ -60,18 +79,19 @@ class UserAPIView(APIView):
                     role='client'
                 )
 
-                user = get_object_or_404(User, email=new_user.email, password=new_user.password)
+                session_id = self.create_session(new_user)
 
                 user_data = {
-                    'id': user.user_id,
-                    'firstname': user.first_name,
-                    'lastname': user.last_name,
-                    'email': user.email,
-                    'role': user.role,
+                    'id': new_user.user_id,
+                    'firstname': new_user.first_name,
+                    'lastname': new_user.last_name,
+                    'email': new_user.email,
+                    'role': new_user.role,
                 }
 
                 response_data = {
                     'user': user_data,
+                    'session_id': session_id,
                     'message': 'User created successfully',
                     'status_code': status.HTTP_201_CREATED
                 }

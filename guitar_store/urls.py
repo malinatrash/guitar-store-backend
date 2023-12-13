@@ -21,6 +21,7 @@ from backend_api.migrations.Views import WishlistAPIView
 from backend_api.migrations.Views.CommentAPIView import CommentsAPIView
 from backend_api.migrations.Views.CountryAPIView import CountryAPIView
 from backend_api.migrations.Views.LikeAPIView import LikeAPIView
+from backend_api.migrations.Views.PayAPIView import PayAPIView
 from backend_api.migrations.Views.SessionAPIView import SessionAPIView
 from backend_api.migrations.Views.ShoppingCartAPIView import ShoppingCartAPIView
 from backend_api.migrations.Views.UserAPIView import UserAPIView
@@ -38,6 +39,7 @@ urlpatterns = [
     path('api/product_categories', ProductCategoryAPIView.as_view()),
     path('api/product_comments', ProductCommentAPIView.as_view()),
     path('api/carts', ShoppingCartAPIView.as_view()),
+    path('api/pay', PayAPIView.as_view()),
     path('api/vendors', VendorAPIView.as_view()),
     path('api/countries', CountryAPIView.as_view()),
     path('api/wishlist', WishlistAPIView.WhishlistAPIView.as_view()),
